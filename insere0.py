@@ -1,4 +1,4 @@
-def consultas():
+def inserindo():
     import mysql.connector
     
     #Criando um dicionario de informações
@@ -19,20 +19,21 @@ def consultas():
     # Criando um objeto cursor para executar as consultas SQL
     cursor = conn.cursor()
     
-    #solicitando o usuario
-    busca = input("Digite o nome do usuario: ")
     
-    #executando consulta com LIKE
+    # Pedindo ao usuario
     
-    sql = "SELECT * FROM estado WHERE nome LIKE %s"
-    val = ("%",busca,"%",)
+    nome_estado = input("Digite o nome do estado: ")
+    codigo_estado = int(input("Digite o código do estado: "))
+    
+    # Inserindo o estado na tabela
+    sql = "INSERT INTO estado (codigo, nome) VALUES (%s, %s)"
+    val = (codigo_estado, nome_estado)
     cursor.execute(sql, val)
     
-    #obtendo os resultados
-    results = cursor.fetchall()
+    # Efetuando as mudanças no banco de dados
+    conn.commit()
     
-    #iterando sobre os resultados
-    for result in results:
-        print(result)
-    #fechar a conexão com o servidor
-    conn.close
+    print(cursor.rowcount, "registro(s) inserido(s) com sucesso.")
+    
+    # Fechar a conexão e o cursor
+    conn.close()
